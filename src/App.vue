@@ -1,26 +1,39 @@
+<!-- src/App.vue -->
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app" class="flex flex-col h-screen">
+    <NavigationBar />
+    <MyToolbar @add-node="addNode" @remove-node="removeNode" />
+    <MySidebar :selectedNode="selectedNode" @update-node-label="updateNodeLabel" />
+    <Mindmap />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { mapActions, mapGetters } from 'vuex';
+import NavigationBar from './components/NavigationBar.vue';
+import MyToolbar from './components/MyToolbar.vue';
+import MySidebar from './components/MySidebar.vue';
+import Mindmap from './components/MyMindmap.vue';
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  components: { NavigationBar, MyToolbar, MySidebar, Mindmap },
+  computed: {
+    ...mapGetters(['getSelectedNode'])
+  },
+  methods: {
+    ...mapActions(['addNode', 'removeNode', 'updateNode']),
+    updateNodeLabel(id, label) {
+      this.updateNode({ nodeId: id, label });
+    }
   }
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 </style>
